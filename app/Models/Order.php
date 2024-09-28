@@ -22,7 +22,8 @@ class Order extends Model
 
     public function materials()
     {
-        return $this->belongsToMany(Material::class, 'order_material')  // Muitos para muitos entre pedidos e materiais
+        return $this->belongsToMany(Material::class, 'order_has_materials')  // Muitos para muitos entre pedidos e materiais
             ->withPivot('quantity', 'subtotal');  // Campos adicionais na tabela pivô
+            
     }
 }
