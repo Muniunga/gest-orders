@@ -20,6 +20,17 @@
         </div>
         <!-- Materiais selecionados -->
         <div class="w-1/2">
+        @if (session()->has('message'))
+            <div class="bg-green-500 text-white p-2 rounded mb-4">
+                {{ session('message') }}
+            </div>
+            @endif
+
+            @if (session()->has('error'))
+            <div class="bg-red-500 text-white p-2 rounded mb-4">
+                {{ session('error') }}
+            </div>
+            @endif
             <h3 class="text-xl font-semibold mb-4">Materiais Selecionados</h3>
             @if(count($selectedMaterials) > 0)
             <ul>

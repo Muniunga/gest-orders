@@ -54,4 +54,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class, 'requester_id');  // Um usuário pode criar vários pedidos
     }
+    public function requester()
+    {
+        return $this->hasOne(Requester::class, 'user_id');
+    }
 }

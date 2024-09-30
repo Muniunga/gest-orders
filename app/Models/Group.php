@@ -9,7 +9,7 @@ class Group extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'allowed_balance', 'approver_id'];
-    
+
     public function approver()
     {
         return $this->belongsTo(User::class, 'approver_id');  // O grupo pertence a um usuário que é o aprovador
@@ -19,6 +19,7 @@ class Group extends Model
     {
         return $this->hasMany(Requester::class, 'group_id');  // Um grupo pode ter vários solicitantes
     }
+    
 
     public function orders()
     {

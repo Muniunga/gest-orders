@@ -6,6 +6,8 @@ use Livewire\Component;
 use App\Models\Material;
 use App\Models\OrderHasMaterial;
 use App\Models\Order;
+use App\Models\Requester;
+use Auth;
 
 class ListMaterial extends Component
 {
@@ -96,20 +98,29 @@ class ListMaterial extends Component
     }
     public function placeOrder()
     {
-        // Certifique-se de que os materiais selecionados existem
+        // Verificar se os materiais selecionados estão presentes
         if (empty($this->selectedMaterials)) {
             session()->flash('error', 'Você precisa selecionar pelo menos um material.');
             return;
         }
 
+        // Obter o requester associado ao usuário autenticado
+        $requester = Requester::where('user_id', Auth::id())->first();
 
+        if (!$requester) {
+            session()->flash('error', 'Não foi possível encontrar um requester associado ao usuário.');
+            return;
+        }
+
+        // Criar o pedido
         $order = Order::create([
-            'user_id' => 1,
+            'requester_id' => $requester->id, // Usando o requester_id correto
+            'group_id' => $requester->group_id, // Obtendo o group_id correto
             'total' => $this->total,
             'status' => 'new',
         ]);
 
-        // Associa os materiais ao pedido
+        // Associar os materiais ao pedido
         foreach ($this->selectedMaterials as $material) {
             $order->materials()->attach($material['id'], [
                 'quantity' => $material['quantity'],
@@ -117,12 +128,13 @@ class ListMaterial extends Component
             ]);
         }
 
-
+        // Mensagem de sucesso
         session()->flash('message', 'Pedido realizado com sucesso!');
 
         // Resetar o carrinho após o pedido
         $this->resetCart();
     }
+
 
 
     public function render()

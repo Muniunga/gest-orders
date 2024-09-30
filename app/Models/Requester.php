@@ -11,6 +11,11 @@ class Requester extends Model
 
     protected $fillable = [ 'user_id', 'group_id'];
 
+    public function requests()
+    {
+        return $this->hasMany(Order::class, 'requester_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);  // O solicitante pertence a um usuário
@@ -18,11 +23,11 @@ class Requester extends Model
 
     public function group()
     {
-        return $this->belongsTo(Group::class);  // O solicitante pertence a um grupo
+        return $this->belongsTo(Group::class);
     }
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'requester_id');  // Um solicitante pode criar vários pedidos
+        return $this->hasMany(Order::class, 'z');  // Um solicitante pode criar vários pedidos
     }
 }
